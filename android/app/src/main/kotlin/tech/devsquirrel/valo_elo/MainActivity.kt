@@ -1,4 +1,4 @@
-package com.example.flutter_vega_embed
+package tech.devsquirrel.valo_elo
 
 import io.flutter.embedding.android.FlutterActivity
 

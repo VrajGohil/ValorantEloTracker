@@ -1,55 +1,142 @@
+import 'dart:async';
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
+
+Future<void> getAuthorization() async {
+  String url = "https://auth.riotgames.com/api/v1/authorization";
+  final http.Response response = await http.post(
+    url,
+    headers: <String, String>{
+      'Content-Type': 'application/json; charset=UTF-8',
+    },
+    body: jsonEncode(<String, String>{
+      "client_id":"play-valorant-web-prod",
+      "nonce":"1",
+      "redirect_uri": "https://beta.playvalorant.com/opt_in",
+      "response_type": "token id_token",
+      "scope": "account openid"
+      },
+    ),
+  );
+  print(response.body);
+}
+
+Future<void> authenticate(String username, String password) async {
+  String url = "https://auth.riotgames.com/api/v1/authorization";
+  final http.Response response = await http.put(
+    url,
+    headers: <String, String>{
+      'Content-Type': 'application/json; charset=UTF-8',
+    },
+    body: jsonEncode(<String, String>{
+      "type": "auth",
+      "username": username,
+      "password": password
+      },
+    ),
+  );
+  print(response.body);
+}
+
+Future<Album> createAlbum(String title) async {
+  final http.Response response = await http.post(
+    'https://jsonplaceholder.typicode.com/albums',
+    headers: <String, String>{
+      'Content-Type': 'application/json; charset=UTF-8',
+    },
+    body: jsonEncode(<String, String>{
+      'title': title,
+    }),
+  );
+
+  if (response.statusCode == 201) {
+    return Album.fromJson(jsonDecode(response.body));
+  } else {
+    throw Exception('Failed to create album.');
+  }
+}
+
+class Album {
+  final int id;
+  final String title;
+
+  Album({this.id, this.title});
+
+  factory Album.fromJson(Map<String, dynamic> json) {
+    return Album(
+      id: json['id'],
+      title: json['title'],
+    );
+  }
+}
 
 void main() {
   runApp(MyApp());
 }
 
-class MyApp extends StatelessWidget {
+class MyApp extends StatefulWidget {
+  MyApp({Key key}) : super(key: key);
+
   @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Flutter Demo',
-      theme: ThemeData(
-        primarySwatch: Colors.amber,
-        visualDensity: VisualDensity.adaptivePlatformDensity,
-      ),
-      home: MyHomePage(title: 'Flutter Vega Embed Demo'),
-    );
+  _MyAppState createState() {
+    return _MyAppState();
   }
 }
 
-class MyHomePage extends StatefulWidget {
-  MyHomePage({Key key, this.title}) : super(key: key);
+class _MyAppState extends State<MyApp> {
+  final TextEditingController _controller = TextEditingController();
+  Future<Album> _futureAlbum;
 
-  final String title;
-
-  @override
-  _MyHomePageState createState() => _MyHomePageState();
-}
-
-class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: PreferredSize(
-        preferredSize: Size.fromHeight(50),
-        child: AppBar(
-          centerTitle: true,
-          title: Text(widget.title),
-        ),
+    return MaterialApp(
+      title: 'Valorant Elo Tracker',
+      theme: ThemeData(
+        primarySwatch: Colors.blue,
       ),
-      body: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: <Widget>[
-          Expanded(
-            flex: 1,
-            child: VegaLiteEmbedder(
-              viewFactoryId: 'seattle_weather.vl.json',
-              vegaLiteSpecLocation:
-                  'vega_lite_specs/interactive_cars_data.vl.json',
-            ),
-          ),
-        ],
+      home: Scaffold(
+        appBar: AppBar(
+          title: Text('Valorant Elo Tracker'),
+        ),
+        body: Container(
+          alignment: Alignment.center,
+          padding: const EdgeInsets.all(8.0),
+          child: (_futureAlbum == null)
+              ? Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[
+                    TextField(
+                      controller: _controller,
+                      decoration: InputDecoration(hintText: 'Enter Title'),
+                    ),
+                    ElevatedButton(
+                      child: Text('Create Data'),
+                      onPressed: () {
+                        setState(() {
+                          print("clicked");
+                          getAuthorization();
+                          authenticate("pedroman05","pedro2002");
+                          // _futureAlbum = createAlbum(_controller.text);
+                        });
+                      },
+                    ),
+                  ],
+                )
+              : FutureBuilder<Album>(
+                  future: _futureAlbum,
+                  builder: (context, snapshot) {
+                    if (snapshot.hasData) {
+                      return Text(snapshot.data.title);
+                    } else if (snapshot.hasError) {
+                      return Text("${snapshot.error}");
+                    }
+
+                    return CircularProgressIndicator();
+                  },
+                ),
+        ),
       ),
     );
   }

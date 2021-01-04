@@ -1,12 +1,12 @@
 {
   "version": "0.2.0",
   "configurations": [
-    
     {
+      "name": "Flutter Web",
       "type": "dart",
       "request": "launch",
-      "name": "Launch flutter web",
-      "args": ["-d", "web-server", "--web-hostname=0.0.0.0", "--web-port=3000"]
-    }
+      "program": "lib/main.dart",
+      "args": ["-d", "web-server", "--web-hostname=0.0.0.0" , "--web-port=3000", "--release"]
+    },
   ]
 }
