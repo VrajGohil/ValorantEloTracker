@@ -1,16 +1,19 @@
-# valo_elo
+<h1 align="center">
+  <img src="https://wallpaperaccess.com/full/2576098.jpg">
+  <br>
+</h1>
 
-A new Flutter project.
+<h2 align="center">Check your Valorant Elo right from your phone</h4>
 
-## Getting Started
+[![Codemagic build status](https://api.codemagic.io/apps/5ff6b5d9eb84020012720033/5ff6b5d9eb84020012720032/status_badge.svg)](https://codemagic.io/apps/5ff6b5d9eb84020012720033/5ff6b5d9eb84020012720032/latest_build)
 
-This project is a starting point for a Flutter application.
+## Program is not affliated with Riot Games. This app is a inspired by the [ValorantStreamOverlay](https://github.com/RumbleMike/ValorantStreamOverlay) made by Rumblemike.
 
-A few resources to get you started if this is your first Flutter project:
+## How to use
 
-- [Lab: Write your first Flutter app](https://flutter.dev/docs/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://flutter.dev/docs/cookbook)
+This Application is developed with Flutter. 
+You can install the application by simply downloading the APK.
 
-For help getting started with Flutter, view our
-[online documentation](https://flutter.dev/docs), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+After installing, Enter your Riot Games credentials and select your region. That's it!
+
+## Note: The application is does not store your creadentials. You have to enter account details everytime you open the app.
