@@ -5,10 +5,7 @@
 
 <h2 align="center">Check your Valorant Elo right from your phone</h4>
 
-<p align="center">
-  [![Codemagic build status](https://api.codemagic.io/apps/5ff6b5d9eb84020012720033/5ff6b5d9eb84020012720032/status_badge.svg)](https://codemagic.io/apps/5ff6b5d9eb84020012720033/5ff6b5d9eb84020012720032/latest_build)
-  
-</p>
+[![Codemagic build status](https://api.codemagic.io/apps/5ff6b5d9eb84020012720033/5ff6b5d9eb84020012720032/status_badge.svg)](https://codemagic.io/apps/5ff6b5d9eb84020012720033/5ff6b5d9eb84020012720032/latest_build)
 
 ## Program is not affliated with Riot Games. This app is a inspired by the [ValorantStreamOverlay](https://github.com/RumbleMike/ValorantStreamOverlay) made by Rumblemike.
 
