@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:valo_elo/constants/maps.dart';
 import 'package:valo_elo/models/network_service.dart';
 import 'package:http/http.dart' as http;
@@ -17,6 +18,7 @@ class MyApp extends StatefulWidget {
 class _MyAppState extends State<MyApp> {
   final TextEditingController _controllerUsername = TextEditingController();
   final TextEditingController _controllerPassword = TextEditingController();
+  bool _obscureText = true;
   String _region = 'na';
   Future<String> _user;
   Future<List<dynamic>> _matches;
@@ -24,6 +26,12 @@ class _MyAppState extends State<MyApp> {
   String _accessToken;
   String _entitlementToken;
   List<int> points = [0, 0, 0];
+
+  void _toggleLogin() {
+    setState(() {
+      _obscureText = !_obscureText;
+    });
+  }
 
   Future<String> getUserId() async {
     final http.Response response = await http.post(
@@ -116,161 +124,252 @@ class _MyAppState extends State<MyApp> {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Valorant Elo Tracker',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-      ),
-      home: Scaffold(
-        appBar: AppBar(
-          title: Text('Valorant Elo Tracker'),
-        ),
-        body: Container(
-          alignment: Alignment.center,
-          padding: const EdgeInsets.all(8.0),
-          child: (_user == null)
-              ? Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: <Widget>[
-                    TextField(
-                      controller: _controllerUsername,
-                      decoration: InputDecoration(hintText: 'Riot Username'),
+    final Size dimensions = MediaQuery.of(context).size;
+    return Scaffold(
+      // appBar: AppBar(
+      //   title: Text('Valorant Elo Tracker'),
+      // ),
+      body: Container(
+        alignment: Alignment.center,
+        padding: const EdgeInsets.all(8.0),
+        child: (_user == null)
+            ? Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  SizedBox(
+                    height: dimensions.height * 0.065,
+                    width: dimensions.width,
+                  ),
+                  Image.network(
+                    'https://i.ibb.co/PZQm2Cd/CITYPNG-COM-HD-Valorant-Black-Symbol-Icon-Sign-Logo-PNG-5019x2800.png',
+                    height: 64,
+                  ),
+                  SizedBox(
+                    height: dimensions.height * 0.02,
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(left: 26),
+                    child: Text(
+                      'Sign in with your\nRiot Account',
+                      style:
+                          TextStyle(fontSize: 36, fontWeight: FontWeight.bold),
                     ),
-                    TextField(
-                      controller: _controllerPassword,
-                      decoration: InputDecoration(hintText: 'Password'),
+                  ),
+                  SizedBox(
+                    height: dimensions.height * 0.05,
+                  ),
+                  Align(
+                    alignment: Alignment.center,
+                    child: Container(
+                      width: dimensions.width * 0.9,
+                      height: dimensions.height * 0.09,
+                      color: Color.fromRGBO(237, 237, 237, 1),
+                      child: TextField(
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                        ),
+                        textAlignVertical: TextAlignVertical.center,
+                        controller: _controllerUsername,
+                        decoration: InputDecoration(
+                            border: InputBorder.none,
+                            contentPadding: EdgeInsets.only(left: 15),
+                            hintText: 'USERNAME',
+                            hintStyle: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                color: Color.fromRGBO(182, 182, 182, 1))),
+                      ),
                     ),
-                    DropdownButton(
-                      isExpanded: true,
-                      value: _region,
-                      items: [
-                        DropdownMenuItem(
-                          child: Text('Asia'),
-                          value: 'ap',
+                  ),
+                  SizedBox(
+                    height: dimensions.height * 0.025,
+                  ),
+                  Align(
+                    alignment: Alignment.center,
+                    child: Container(
+                      width: dimensions.width * 0.9,
+                      height: dimensions.height * 0.09,
+                      color: Color.fromRGBO(237, 237, 237, 1),
+                      child: TextField(
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
                         ),
-                        DropdownMenuItem(
-                          child: Text('North America'),
-                          value: 'na',
+                        textAlignVertical: TextAlignVertical.center,
+                        controller: _controllerPassword,
+                        obscureText: _obscureText,
+                        decoration: InputDecoration(
+                            suffixIcon: GestureDetector(
+                              onTap: _toggleLogin,
+                              child: Icon(
+                                _obscureText
+                                    ? FontAwesomeIcons.eye
+                                    : FontAwesomeIcons.eyeSlash,
+                                color: Colors.black,
+                              ),
+                            ),
+                            border: InputBorder.none,
+                            contentPadding: EdgeInsets.only(left: 15),
+                            hintText: 'PASSWORD',
+                            hintStyle: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                color: Color.fromRGBO(182, 182, 182, 1))),
+                      ),
+                    ),
+                  ),
+                  SizedBox(
+                    height: dimensions.height * 0.025,
+                  ),
+                  DropdownButton(
+                    isExpanded: true,
+                    value: _region,
+                    items: [
+                      DropdownMenuItem(
+                        child: Text('Asia'),
+                        value: 'ap',
+                      ),
+                      DropdownMenuItem(
+                        child: Text('North America'),
+                        value: 'na',
+                      ),
+                      DropdownMenuItem(
+                        child: Text('Europe'),
+                        value: 'eu',
+                      ),
+                    ],
+                    onChanged: (value) {
+                      setState(() {
+                        _region = value;
+                      });
+                    },
+                    icon: Icon(Icons.map),
+                  ),
+                  SizedBox(
+                    height: dimensions.height * 0.05,
+                  ),
+                  Align(
+                    alignment: Alignment.center,
+                    child: SizedBox(
+                      width: 80,
+                      height: 80,
+                      child: RaisedButton(
+                        hoverColor: Colors.redAccent.shade200,
+                        color: Colors.black,
+                        child: Icon(
+                          Icons.arrow_forward_rounded,
+                          size: 42,
+                          color: Colors.white,
                         ),
-                        DropdownMenuItem(
-                          child: Text('Europe'),
-                          value: 'eu',
+                        focusColor: Colors.redAccent.shade200,
+                        splashColor: Colors.redAccent.shade200,
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(18),
+                            side: BorderSide.none),
+                        onPressed: () async {
+                          setState(() {
+                            _user = _user;
+                          });
+                          NetworkService session = NetworkService();
+                          String url =
+                              'https://auth.riotgames.com/api/v1/authorization';
+                          print(await session.post(url, body: {
+                            "client_id": "play-valorant-web-prod",
+                            "nonce": "1",
+                            "redirect_uri":
+                                "https://playvalorant.com/opt_in" + "",
+                            "response_type": "token id_token",
+                            "scope": "account openid"
+                          }));
+                          Map authResponse = await session.put(
+                            url,
+                            body: {
+                              "type": "auth",
+                              "username": _controllerUsername.text,
+                              "password": _controllerPassword.text
+                            },
+                          );
+                          print(authResponse['response']['parameters']['uri']);
+                          String authURL =
+                              authResponse['response']['parameters']['uri'];
+                          setState(() {
+                            _accessToken = RegExp("access_token=(.+?)&scope=")
+                                .stringMatch(authURL)
+                                .split('=')[1]
+                                .split('&')[0];
+                          });
+
+                          print(
+                              "=================== accesss token ===================");
+                          print(_accessToken);
+                          _entitlementToken = await getEntitlementToken();
+                          setState(() {});
+                          print(
+                              "=================== entitlement token ===================");
+                          print(_entitlementToken);
+                          setState(() {
+                            _user = getUserId();
+                            print("clicked");
+                          });
+                          _matches = getCompiDetails(await _user);
+                          updateToLatestGames(await _matches);
+                          setState(() {});
+                        },
+                      ),
+                    ),
+                  )
+                ],
+              )
+            : FutureBuilder<List>(
+                future: _matches,
+                builder: (context, snapshot) {
+                  if (snapshot.hasData) {
+                    Map<dynamic, dynamic> match = snapshot.data.firstWhere(
+                        (element) =>
+                            element['CompetitiveMovement'] !=
+                            'MOVEMENT_UNKNOWN');
+                    return Column(
+                      children: [
+                        Image.network(
+                          'https://firebasestorage.googleapis.com/v0/b/cloud-storage-test-ac898.appspot.com/o/${match['TierAfterUpdate']}.png?alt=media&token=d0388a4f-69b6-40a9-8dde-4e10c6f61bee',
+                          // 'https://hosting.photobucket.com/images/i/valoelo/${match['TierAfterUpdate']}.png',
+                          width: 100,
+                          height: 100,
                         ),
+                        Text(
+                          'Rank : ' +
+                              rankMap[match['TierAfterUpdate'].toString()],
+                        ),
+                        Text(
+                          'Competitive Movement : ' +
+                              match['CompetitiveMovement'].toString(),
+                        ),
+                        Text(
+                          'Points For last 3 match : ' + points.toString(),
+                        ),
+                        Text(
+                          'Rank Point : ' +
+                              match['TierProgressAfterUpdate'].toString(),
+                        ),
+                        Text('Elo : ' +
+                            ((match['TierAfterUpdate'] * 100) -
+                                    300 +
+                                    match['TierProgressAfterUpdate'])
+                                .toString()),
+                        ElevatedButton(
+                            onPressed: () async {
+                              _matches = getCompiDetails(await _user);
+                              updateToLatestGames(await _matches);
+                              setState(() {});
+                            },
+                            child: Text('Refresh'))
                       ],
-                      onChanged: (value) {
-                        setState(() {
-                          _region = value;
-                        });
-                      },
-                      icon: Icon(Icons.map),
-                    ),
-                    ElevatedButton(
-                      child: Text('Check Elo'),
-                      onPressed: () async {
-                        setState(() {
-                          _user = _user;
-                        });
-                        NetworkService session = NetworkService();
-                        String url =
-                            'https://auth.riotgames.com/api/v1/authorization';
-                        print(await session.post(url, body: {
-                          "client_id": "play-valorant-web-prod",
-                          "nonce": "1",
-                          "redirect_uri":
-                              "https://playvalorant.com/opt_in" + "",
-                          "response_type": "token id_token",
-                          "scope": "account openid"
-                        }));
-                        Map authResponse = await session.put(
-                          url,
-                          body: {
-                            "type": "auth",
-                            "username": _controllerUsername.text,
-                            "password": _controllerPassword.text
-                          },
-                        );
-                        print(authResponse['response']['parameters']['uri']);
-                        String authURL =
-                            authResponse['response']['parameters']['uri'];
-                        setState(() {
-                          _accessToken = RegExp("access_token=(.+?)&scope=")
-                              .stringMatch(authURL)
-                              .split('=')[1]
-                              .split('&')[0];
-                        });
+                    );
+                  } else if (snapshot.hasError) {
+                    return Text("${snapshot.error}");
+                  }
 
-                        print(
-                            "=================== accesss token ===================");
-                        print(_accessToken);
-                        _entitlementToken = await getEntitlementToken();
-                        setState(() {});
-                        print(
-                            "=================== entitlement token ===================");
-                        print(_entitlementToken);
-                        setState(() {
-                          _user = getUserId();
-                          print("clicked");
-                        });
-                        _matches = getCompiDetails(await _user);
-                        updateToLatestGames(await _matches);
-                        setState(() {});
-                      },
-                    ),
-                  ],
-                )
-              : FutureBuilder<List>(
-                  future: _matches,
-                  builder: (context, snapshot) {
-                    if (snapshot.hasData) {
-                      Map<dynamic, dynamic> match = snapshot.data.firstWhere(
-                          (element) =>
-                              element['CompetitiveMovement'] !=
-                              'MOVEMENT_UNKNOWN');
-                      return Column(
-                        children: [
-                          Image.network(
-                            'https://firebasestorage.googleapis.com/v0/b/cloud-storage-test-ac898.appspot.com/o/${match['TierAfterUpdate']}.png?alt=media&token=d0388a4f-69b6-40a9-8dde-4e10c6f61bee',
-                            // 'https://hosting.photobucket.com/images/i/valoelo/${match['TierAfterUpdate']}.png',
-                            width: 100,
-                            height: 100,
-                          ),
-                          Text(
-                            'Rank : ' +
-                                rankMap[match['TierAfterUpdate'].toString()],
-                          ),
-                          Text(
-                            'Competitive Movement : ' +
-                                match['CompetitiveMovement'].toString(),
-                          ),
-                          Text(
-                            'Points For last 3 match : ' + points.toString(),
-                          ),
-                          Text(
-                            'Rank Point : ' +
-                                match['TierProgressAfterUpdate'].toString(),
-                          ),
-                          Text('Elo : ' +
-                              ((match['TierAfterUpdate'] * 100) -
-                                      300 +
-                                      match['TierProgressAfterUpdate'])
-                                  .toString()),
-                          ElevatedButton(
-                              onPressed: () async {
-                                _matches = getCompiDetails(await _user);
-                                updateToLatestGames(await _matches);
-                                setState(() {});
-                              },
-                              child: Text('Refresh'))
-                        ],
-                      );
-                    } else if (snapshot.hasError) {
-                      return Text("${snapshot.error}");
-                    }
-
-                    return CircularProgressIndicator();
-                  },
-                ),
-        ),
+                  return CircularProgressIndicator();
+                },
+              ),
       ),
     );
   }
