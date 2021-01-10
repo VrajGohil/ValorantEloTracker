@@ -156,6 +156,7 @@ class _MyAppState extends State<MyApp> {
     return Scaffold(
       key: _scaffoldKey,
       body: Container(
+        color: Colors.white,
         alignment: Alignment.center,
         padding: const EdgeInsets.all(8.0),
         child: (_user == null)
@@ -190,33 +191,59 @@ class _MyAppState extends State<MyApp> {
                     SizedBox(
                       height: size.height * 0.025,
                     ),
-                    DropdownButton(
-                      isExpanded: true,
-                      value: _region,
-                      items: [
-                        DropdownMenuItem(
-                          child: Text('Asia'),
-                          value: 'ap',
+                    Container(
+                      margin: const EdgeInsets.all(12.0),
+                      padding: const EdgeInsets.all(12.0),
+                      decoration: BoxDecoration(
+                        border: Border.all(
+                          width: 2,
+                          color: Colors.black,
                         ),
-                        DropdownMenuItem(
-                          child: Text('Europe'),
-                          value: 'eu',
-                        ),
-                        DropdownMenuItem(
-                          child: Text('Korea'),
-                          value: 'kr',
-                        ),
-                        DropdownMenuItem(
-                          child: Text('North America'),
-                          value: 'na',
-                        ),
-                      ],
-                      onChanged: (value) {
-                        setState(() {
-                          _region = value;
-                        });
-                      },
-                      icon: Icon(Icons.map),
+                        borderRadius: BorderRadius.circular(12.0),
+                      ),
+                      child: Stack(
+                        children: [
+                          Transform.translate(
+                            offset: Offset(5, -22),
+                            child: Text(
+                              '   Region   ',
+                              style: TextStyle(backgroundColor: Colors.white),
+                            ),
+                          ),
+                          DropdownButton(
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              color: Color.fromRGBO(182, 182, 182, 1),
+                            ),
+                            isExpanded: true,
+                            value: _region,
+                            items: [
+                              DropdownMenuItem(
+                                child: Text('Asia'),
+                                value: 'ap',
+                              ),
+                              DropdownMenuItem(
+                                child: Text('Europe'),
+                                value: 'eu',
+                              ),
+                              DropdownMenuItem(
+                                child: Text('Korea'),
+                                value: 'kr',
+                              ),
+                              DropdownMenuItem(
+                                child: Text('North America'),
+                                value: 'na',
+                              ),
+                            ],
+                            onChanged: (value) {
+                              setState(() {
+                                _region = value;
+                              });
+                            },
+                            icon: Icon(Icons.map),
+                          ),
+                        ],
+                      ),
                     ),
                     SizedBox(
                       height: size.height * 0.05,
