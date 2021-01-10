@@ -199,16 +199,16 @@ class _MyAppState extends State<MyApp> {
                           value: 'ap',
                         ),
                         DropdownMenuItem(
-                          child: Text('North America'),
-                          value: 'na',
-                        ),
-                        DropdownMenuItem(
                           child: Text('Europe'),
                           value: 'eu',
                         ),
                         DropdownMenuItem(
                           child: Text('Korea'),
                           value: 'kr',
+                        ),
+                        DropdownMenuItem(
+                          child: Text('North America'),
+                          value: 'na',
                         ),
                       ],
                       onChanged: (value) {

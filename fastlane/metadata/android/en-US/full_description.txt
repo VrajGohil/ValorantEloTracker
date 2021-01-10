@@ -1,0 +1,6 @@
+Lets you check valorant stats like
+    * Elo
+    * Rank point
+
+This Application is developed with Flutter. After installing, Enter your Riot Games credentials and select your region. That's it!
+Note: The application is does not store your creadentials. You have to enter account details everytime you open the app. Program is not affliated with Riot Games.
