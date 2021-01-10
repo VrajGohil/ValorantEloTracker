@@ -312,44 +312,137 @@ class _MyAppState extends State<MyApp> {
                     Map<dynamic, dynamic> match = snapshot.data.firstWhere(
                         (element) =>
                             element['CompetitiveMovement'] !=
-                            'MOVEMENT_UNKNOWN',
-                        orElse: () => snapshot.data.first);
-                    print(match);
-                    return Column(
-                      children: [
-                        Image.network(
-                          'https://firebasestorage.googleapis.com/v0/b/cloud-storage-test-ac898.appspot.com/o/${match['TierAfterUpdate']}.png?alt=media&token=d0388a4f-69b6-40a9-8dde-4e10c6f61bee',
-                          width: 100,
-                          height: 100,
-                        ),
-                        Text(
-                          'Rank : ' +
-                              rankMap[match['TierAfterUpdate'].toString()],
-                        ),
-                        Text(
-                          'Competitive Movement : ' +
-                              match['CompetitiveMovement'].toString(),
-                        ),
-                        Text(
-                          'Points For last 3 match : ' + points.toString(),
-                        ),
-                        Text(
-                          'Rank Point : ' +
-                              match['TierProgressAfterUpdate'].toString(),
-                        ),
-                        Text('Elo : ' +
-                            ((match['TierAfterUpdate'] * 100) -
-                                    300 +
-                                    match['TierProgressAfterUpdate'])
-                                .toString()),
-                        ElevatedButton(
-                            onPressed: () async {
-                              _matches = getCompiDetails(await _user);
-                              updateToLatestGames(await _matches);
-                              setState(() {});
-                            },
-                            child: Text('Refresh'))
-                      ],
+                            'MOVEMENT_UNKNOWN');
+                    return Container(
+                      color: Color.fromRGBO(15, 25, 35, 1),
+                      width: double.infinity,
+                      height: double.infinity,
+                      child: Column(
+                        children: [
+                          SizedBox(height: size.height * 0.1),
+                          Image.network(
+                            'https://firebasestorage.googleapis.com/v0/b/cloud-storage-test-ac898.appspot.com/o/${match['TierAfterUpdate']}.png?alt=media&token=d0388a4f-69b6-40a9-8dde-4e10c6f61bee',
+                            // 'https://hosting.photobucket.com/images/i/valoelo/${match['TierAfterUpdate']}.png',
+                            width: 100,
+                            height: 100,
+                          ),
+                          SizedBox(height: size.height * 0.02),
+                          Text(
+                            '' + rankMap[match['TierAfterUpdate'].toString()],
+                            style: TextStyle(
+                                color: Colors.white,
+                                fontWeight: FontWeight.bold,
+                                fontSize: 20),
+                          ),
+                          SizedBox(height: size.height * 0.008),
+                          Text(
+                            'Rank Point : ' +
+                                match['TierProgressAfterUpdate'].toString(),
+                            style: TextStyle(color: Colors.white, fontSize: 16),
+                          ),
+                          Text(
+                            'Elo : ' +
+                                ((match['TierAfterUpdate'] * 100) -
+                                        300 +
+                                        match['TierProgressAfterUpdate'])
+                                    .toString(),
+                            style: TextStyle(color: Colors.white, fontSize: 16),
+                          ),
+                          // Text(
+                          //   'Competitive Movement : ' +
+                          //       match['CompetitiveMovement'].toString(),
+                          // ),
+                          SizedBox(height: size.height * 0.032),
+                          Text(
+                            'Points For last 3 match : ' /*+ points.toString()*/,
+                            style: TextStyle(
+                                color: Colors.white,
+                                fontWeight: FontWeight.bold,
+                                fontSize: 20),
+                          ),
+                          SizedBox(height: size.height * 0.032),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                            children: [
+                              Container(
+                                height: size.width * 0.24,
+                                width: size.width * 0.24,
+                                decoration: BoxDecoration(
+                                  color: Colors.transparent,
+                                  border: Border.all(
+                                      color: Colors.white, width: 2.5),
+                                  borderRadius: BorderRadius.circular(20),
+                                ),
+                                child: Center(
+                                  child: Text(
+                                    "${points[0]}",
+                                    style: TextStyle(
+                                        color: (points[0] >= 0)
+                                            ? Colors.greenAccent
+                                            : Colors.redAccent,
+                                        fontSize: 28,
+                                        fontWeight: FontWeight.bold),
+                                  ),
+                                ),
+                              ),
+                              Container(
+                                height: size.width * 0.24,
+                                width: size.width * 0.24,
+                                decoration: BoxDecoration(
+                                  color: Colors.transparent,
+                                  border: Border.all(
+                                      color: Colors.white, width: 2.5),
+                                  borderRadius: BorderRadius.circular(20),
+                                ),
+                                child: Center(
+                                  child: Text(
+                                    "${points[1]}",
+                                    style: TextStyle(
+                                        color: (points[1] >= 0)
+                                            ? Colors.greenAccent
+                                            : Colors.redAccent,
+                                        fontSize: 28,
+                                        fontWeight: FontWeight.bold),
+                                  ),
+                                ),
+                              ),
+                              Container(
+                                height: size.width * 0.24,
+                                width: size.width * 0.24,
+                                decoration: BoxDecoration(
+                                  color: Colors.transparent,
+                                  border: Border.all(
+                                      color: Colors.white, width: 2.5),
+                                  borderRadius: BorderRadius.circular(20),
+                                ),
+                                child: Center(
+                                  child: Text(
+                                    "${points[2]}",
+                                    style: TextStyle(
+                                        color: (points[2] >= 0)
+                                            ? Colors.greenAccent
+                                            : Colors.redAccent,
+                                        fontSize: 28,
+                                        fontWeight: FontWeight.bold),
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                          SizedBox(
+                            height: size.height * 0.1,
+                          ),
+                          RaisedButton(
+                              color: Colors.redAccent,
+                              splashColor: Colors.greenAccent,
+                              onPressed: () async {
+                                _matches = getCompiDetails(await _user);
+                                updateToLatestGames(await _matches);
+                                setState(() {});
+                              },
+                              child: Text('Refresh'))
+                        ],
+                      ),
                     );
                   } else if (snapshot.hasError) {
                     return Text("${snapshot.error}");
@@ -386,19 +479,31 @@ class _MyAppState extends State<MyApp> {
             value: _region,
             items: [
               DropdownMenuItem(
-                child: Text('Asia'),
+                child: Text(
+                  'Asia',
+                  style: TextStyle(color: Colors.black),
+                ),
                 value: 'ap',
               ),
               DropdownMenuItem(
-                child: Text('Europe'),
+                child: Text(
+                  'Europe',
+                  style: TextStyle(color: Colors.black),
+                ),
                 value: 'eu',
               ),
               DropdownMenuItem(
-                child: Text('Korea'),
+                child: Text(
+                  'Korea',
+                  style: TextStyle(color: Colors.black),
+                ),
                 value: 'kr',
               ),
               DropdownMenuItem(
-                child: Text('North America'),
+                child: Text(
+                  'North America',
+                  style: TextStyle(color: Colors.black),
+                ),
                 value: 'na',
               ),
             ],
