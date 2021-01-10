@@ -429,10 +429,12 @@ class _MyAppState extends State<MyApp> {
                               ),
                             ],
                           ),
-                          SizedBox(height: size.height * 0.1,),
+                          SizedBox(
+                            height: size.height * 0.1,
+                          ),
                           RaisedButton(
-                            color: Colors.redAccent,
-                            splashColor: Colors.greenAccent,
+                              color: Colors.redAccent,
+                              splashColor: Colors.greenAccent,
                               onPressed: () async {
                                 _matches = getCompiDetails(await _user);
                                 updateToLatestGames(await _matches);
