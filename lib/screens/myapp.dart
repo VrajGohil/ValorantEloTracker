@@ -145,6 +145,15 @@ class _MyAppState extends State<MyApp> {
     setState(() {});
   }
 
+  Color getProgressColor(int points) {
+    if (points < 25)
+      return Colors.red;
+    else if (points < 75)
+      return Colors.yellow;
+    else
+      return Colors.green;
+  }
+
   @override
   void dispose() {
     _controllerUsername.dispose();
@@ -324,13 +333,17 @@ class _MyAppState extends State<MyApp> {
                           SizedBox(height: size.height * 0.1),
                           CircularPercentIndicator(
                             radius: 150.0,
-                            lineWidth: 5.0,
+                            lineWidth: 10.0,
                             percent: match['TierProgressAfterUpdate'] / 100,
                             center: Image.network(
                               'https://firebasestorage.googleapis.com/v0/b/cloud-storage-test-ac898.appspot.com/o/${match['TierAfterUpdate']}.png?alt=media&token=d0388a4f-69b6-40a9-8dde-4e10c6f61bee',
                               width: 100,
                               height: 100,
                             ),
+                            backgroundWidth: 5.0,
+                            circularStrokeCap: CircularStrokeCap.round,
+                            progressColor: getProgressColor(
+                                match['TierProgressAfterUpdate']),
                           ),
                           SizedBox(height: size.height * 0.02),
                           Text(
