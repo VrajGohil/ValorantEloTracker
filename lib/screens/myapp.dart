@@ -312,12 +312,13 @@ class _MyAppState extends State<MyApp> {
                     Map<dynamic, dynamic> match = snapshot.data.firstWhere(
                         (element) =>
                             element['CompetitiveMovement'] !=
-                            'MOVEMENT_UNKNOWN');
+                            'MOVEMENT_UNKNOWN',
+                        orElse: () => snapshot.data.first);
+                    print(match);
                     return Column(
                       children: [
                         Image.network(
                           'https://firebasestorage.googleapis.com/v0/b/cloud-storage-test-ac898.appspot.com/o/${match['TierAfterUpdate']}.png?alt=media&token=d0388a4f-69b6-40a9-8dde-4e10c6f61bee',
-                          // 'https://hosting.photobucket.com/images/i/valoelo/${match['TierAfterUpdate']}.png',
                           width: 100,
                           height: 100,
                         ),
