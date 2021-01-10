@@ -2,9 +2,11 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:percent_indicator/circular_percent_indicator.dart';
 import 'package:valo_elo/constants/maps.dart';
 import 'package:valo_elo/models/network_service.dart';
 import 'package:http/http.dart' as http;
+import 'package:valo_elo/widgets/point_card.dart';
 
 class MyApp extends StatefulWidget {
   MyApp({Key key}) : super(key: key);
@@ -158,7 +160,6 @@ class _MyAppState extends State<MyApp> {
       body: Container(
         color: Colors.white,
         alignment: Alignment.center,
-        padding: const EdgeInsets.all(8.0),
         child: (_user == null)
             ? SingleChildScrollView(
                 child: Column(
@@ -312,19 +313,24 @@ class _MyAppState extends State<MyApp> {
                     Map<dynamic, dynamic> match = snapshot.data.firstWhere(
                         (element) =>
                             element['CompetitiveMovement'] !=
-                            'MOVEMENT_UNKNOWN');
+                            'MOVEMENT_UNKNOWN',
+                        orElse: () => snapshot.data.first);
                     return Container(
                       color: Color.fromRGBO(15, 25, 35, 1),
-                      width: double.infinity,
-                      height: double.infinity,
+                      width: size.width,
+                      height: size.height,
                       child: Column(
                         children: [
                           SizedBox(height: size.height * 0.1),
-                          Image.network(
-                            'https://firebasestorage.googleapis.com/v0/b/cloud-storage-test-ac898.appspot.com/o/${match['TierAfterUpdate']}.png?alt=media&token=d0388a4f-69b6-40a9-8dde-4e10c6f61bee',
-                            // 'https://hosting.photobucket.com/images/i/valoelo/${match['TierAfterUpdate']}.png',
-                            width: 100,
-                            height: 100,
+                          CircularPercentIndicator(
+                            radius: 150.0,
+                            lineWidth: 5.0,
+                            percent: match['TierProgressAfterUpdate'] / 100,
+                            center: Image.network(
+                              'https://firebasestorage.googleapis.com/v0/b/cloud-storage-test-ac898.appspot.com/o/${match['TierAfterUpdate']}.png?alt=media&token=d0388a4f-69b6-40a9-8dde-4e10c6f61bee',
+                              width: 100,
+                              height: 100,
+                            ),
                           ),
                           SizedBox(height: size.height * 0.02),
                           Text(
@@ -354,7 +360,7 @@ class _MyAppState extends State<MyApp> {
                           // ),
                           SizedBox(height: size.height * 0.032),
                           Text(
-                            'Points For last 3 match : ' /*+ points.toString()*/,
+                            'Points for last 3 match ',
                             style: TextStyle(
                                 color: Colors.white,
                                 fontWeight: FontWeight.bold,
@@ -364,69 +370,9 @@ class _MyAppState extends State<MyApp> {
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                             children: [
-                              Container(
-                                height: size.width * 0.24,
-                                width: size.width * 0.24,
-                                decoration: BoxDecoration(
-                                  color: Colors.transparent,
-                                  border: Border.all(
-                                      color: Colors.white, width: 2.5),
-                                  borderRadius: BorderRadius.circular(20),
-                                ),
-                                child: Center(
-                                  child: Text(
-                                    "${points[0]}",
-                                    style: TextStyle(
-                                        color: (points[0] >= 0)
-                                            ? Colors.greenAccent
-                                            : Colors.redAccent,
-                                        fontSize: 28,
-                                        fontWeight: FontWeight.bold),
-                                  ),
-                                ),
-                              ),
-                              Container(
-                                height: size.width * 0.24,
-                                width: size.width * 0.24,
-                                decoration: BoxDecoration(
-                                  color: Colors.transparent,
-                                  border: Border.all(
-                                      color: Colors.white, width: 2.5),
-                                  borderRadius: BorderRadius.circular(20),
-                                ),
-                                child: Center(
-                                  child: Text(
-                                    "${points[1]}",
-                                    style: TextStyle(
-                                        color: (points[1] >= 0)
-                                            ? Colors.greenAccent
-                                            : Colors.redAccent,
-                                        fontSize: 28,
-                                        fontWeight: FontWeight.bold),
-                                  ),
-                                ),
-                              ),
-                              Container(
-                                height: size.width * 0.24,
-                                width: size.width * 0.24,
-                                decoration: BoxDecoration(
-                                  color: Colors.transparent,
-                                  border: Border.all(
-                                      color: Colors.white, width: 2.5),
-                                  borderRadius: BorderRadius.circular(20),
-                                ),
-                                child: Center(
-                                  child: Text(
-                                    "${points[2]}",
-                                    style: TextStyle(
-                                        color: (points[2] >= 0)
-                                            ? Colors.greenAccent
-                                            : Colors.redAccent,
-                                        fontSize: 28,
-                                        fontWeight: FontWeight.bold),
-                                  ),
-                                ),
-                              ),
+                              PointCard(size: size, points: points[0]),
+                              PointCard(size: size, points: points[1]),
+                              PointCard(size: size, points: points[2]),
                             ],
                           ),
                           SizedBox(
