@@ -201,49 +201,7 @@ class _MyAppState extends State<MyApp> {
                         ),
                         borderRadius: BorderRadius.circular(12.0),
                       ),
-                      child: Stack(
-                        children: [
-                          Transform.translate(
-                            offset: Offset(5, -22),
-                            child: Text(
-                              '   Region   ',
-                              style: TextStyle(backgroundColor: Colors.white),
-                            ),
-                          ),
-                          DropdownButton(
-                            style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                              color: Color.fromRGBO(182, 182, 182, 1),
-                            ),
-                            isExpanded: true,
-                            value: _region,
-                            items: [
-                              DropdownMenuItem(
-                                child: Text('Asia'),
-                                value: 'ap',
-                              ),
-                              DropdownMenuItem(
-                                child: Text('Europe'),
-                                value: 'eu',
-                              ),
-                              DropdownMenuItem(
-                                child: Text('Korea'),
-                                value: 'kr',
-                              ),
-                              DropdownMenuItem(
-                                child: Text('North America'),
-                                value: 'na',
-                              ),
-                            ],
-                            onChanged: (value) {
-                              setState(() {
-                                _region = value;
-                              });
-                            },
-                            icon: Icon(Icons.map),
-                          ),
-                        ],
-                      ),
+                      child: buildDropDown(),
                     ),
                     SizedBox(
                       height: size.height * 0.05,
@@ -407,6 +365,54 @@ class _MyAppState extends State<MyApp> {
     );
   }
 
+  Stack buildDropDown() {
+    return Stack(
+      children: [
+        Transform.translate(
+          offset: Offset(5, -22),
+          child: Text(
+            '   Region   ',
+            style: TextStyle(backgroundColor: Colors.white),
+          ),
+        ),
+        DropdownButtonHideUnderline(
+          child: DropdownButton(
+            style: TextStyle(
+              fontWeight: FontWeight.bold,
+              color: Color.fromRGBO(182, 182, 182, 1),
+            ),
+            isExpanded: true,
+            value: _region,
+            items: [
+              DropdownMenuItem(
+                child: Text('Asia'),
+                value: 'ap',
+              ),
+              DropdownMenuItem(
+                child: Text('Europe'),
+                value: 'eu',
+              ),
+              DropdownMenuItem(
+                child: Text('Korea'),
+                value: 'kr',
+              ),
+              DropdownMenuItem(
+                child: Text('North America'),
+                value: 'na',
+              ),
+            ],
+            onChanged: (value) {
+              setState(() {
+                _region = value;
+              });
+            },
+            icon: Icon(Icons.map),
+          ),
+        ),
+      ],
+    );
+  }
+
   Center buildLoginForm(Size size) {
     return Center(
       child: Form(
@@ -416,8 +422,10 @@ class _MyAppState extends State<MyApp> {
           children: [
             Container(
               width: size.width * 0.9,
-              // height: size.height * 0.09,
-              color: Color.fromRGBO(237, 237, 237, 1),
+              decoration: BoxDecoration(
+                color: Color.fromRGBO(237, 237, 237, 1),
+                borderRadius: BorderRadius.circular(12.0),
+              ),
               child: Padding(
                 padding: const EdgeInsets.symmetric(vertical: 8.0),
                 child: TextFormField(
@@ -444,7 +452,10 @@ class _MyAppState extends State<MyApp> {
             ),
             Container(
               width: size.width * 0.9,
-              color: Color.fromRGBO(237, 237, 237, 1),
+              decoration: BoxDecoration(
+                color: Color.fromRGBO(237, 237, 237, 1),
+                borderRadius: BorderRadius.circular(12.0),
+              ),
               child: Padding(
                 padding: const EdgeInsets.symmetric(vertical: 8.0),
                 child: TextFormField(
