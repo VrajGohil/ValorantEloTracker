@@ -64,6 +64,8 @@ class _MyAppState extends State<MyApp> {
     );
 
     if (response.statusCode == 201 || response.statusCode == 200) {
+      print("=================== user_id ===================");
+      print(jsonDecode(response.body)['sub']);
       return jsonDecode(response.body)['sub'];
     } else {
       showInSnackBar('Failed to get user id');
@@ -113,25 +115,28 @@ class _MyAppState extends State<MyApp> {
     if (matches != null && matches.isNotEmpty) {
       int count = 0, i = 0;
       matches.forEach((game) {
-        if (game["CompetitiveMovement"] == "MOVEMENT_UNKNOWN") {
-          // not a ranked game
-        } else if (game["CompetitiveMovement"] == "PROMOTED") {
+        if (game["TierAfterUpdate"] == 0) {
+          print("Tier not changed");
+        } else if (game["TierAfterUpdate"] >
+            game[
+                "TierBeforeUpdate"]) // Promoted meaning, that afterupdate is more than beforeupdate
+        {
           // player promoted
-          int before = game["TierProgressBeforeUpdate"];
-          int after = game["TierProgressAfterUpdate"];
+          int before = game["RankedRatingBeforeUpdate"];
+          int after = game["RankedRatingAfterUpdate"];
           int differ = (after - before) + 100;
           points[i++] = differ;
           count++;
-        } else if (game["CompetitiveMovement"] == "DEMOTED") {
+        } else if (game["TierAfterUpdate"] < game["TierBeforeUpdate"]) {
           // player demoted
-          int before = game["TierProgressBeforeUpdate"];
-          int after = game["TierProgressAfterUpdate"];
+          int before = game["RankedRatingBeforeUpdate"];
+          int after = game["RankedRatingAfterUpdate"];
           int differ = (after - before) - 100;
           points[i++] = differ;
           count++;
         } else {
-          int before = game["TierProgressBeforeUpdate"];
-          int after = game["TierProgressAfterUpdate"];
+          int before = game["RankedRatingBeforeUpdate"];
+          int after = game["RankedRatingAfterUpdate"];
           points[i++] = after - before;
           count++;
         }
@@ -320,10 +325,9 @@ class _MyAppState extends State<MyApp> {
                 builder: (context, snapshot) {
                   if (snapshot.hasData) {
                     Map<dynamic, dynamic> match = snapshot.data.firstWhere(
-                        (element) =>
-                            element['CompetitiveMovement'] !=
-                            'MOVEMENT_UNKNOWN',
+                        (element) => element['RankedRatingAfterUpdate'] != 0,
                         orElse: () => snapshot.data.first);
+                    int rr = match['RankedRatingAfterUpdate'];
                     return Container(
                       color: Color.fromRGBO(15, 25, 35, 1),
                       width: size.width,
@@ -334,7 +338,7 @@ class _MyAppState extends State<MyApp> {
                           CircularPercentIndicator(
                             radius: 150.0,
                             lineWidth: 10.0,
-                            percent: match['TierProgressAfterUpdate'] / 100,
+                            percent: rr / 100,
                             center: Image.network(
                               'https://firebasestorage.googleapis.com/v0/b/cloud-storage-test-ac898.appspot.com/o/${match['TierAfterUpdate']}.png?alt=media&token=d0388a4f-69b6-40a9-8dde-4e10c6f61bee',
                               width: 100,
@@ -342,8 +346,7 @@ class _MyAppState extends State<MyApp> {
                             ),
                             backgroundWidth: 5.0,
                             circularStrokeCap: CircularStrokeCap.round,
-                            progressColor: getProgressColor(
-                                match['TierProgressAfterUpdate']),
+                            progressColor: getProgressColor(rr),
                           ),
                           SizedBox(height: size.height * 0.02),
                           Text(
@@ -355,15 +358,12 @@ class _MyAppState extends State<MyApp> {
                           ),
                           SizedBox(height: size.height * 0.008),
                           Text(
-                            'Rank Point : ' +
-                                match['TierProgressAfterUpdate'].toString(),
+                            'Rank Point : ' + rr.toString(),
                             style: TextStyle(color: Colors.white, fontSize: 16),
                           ),
                           Text(
                             'Elo : ' +
-                                ((match['TierAfterUpdate'] * 100) -
-                                        300 +
-                                        match['TierProgressAfterUpdate'])
+                                ((match['TierAfterUpdate'] * 100) - 300 + rr)
                                     .toString(),
                             style: TextStyle(color: Colors.white, fontSize: 16),
                           ),
@@ -373,7 +373,7 @@ class _MyAppState extends State<MyApp> {
                           // ),
                           SizedBox(height: size.height * 0.032),
                           Text(
-                            'Points for last 3 match ',
+                            'Rating for last 3 match ',
                             style: TextStyle(
                                 color: Colors.white,
                                 fontWeight: FontWeight.bold,
