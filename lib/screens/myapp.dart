@@ -24,12 +24,12 @@ class _MyAppState extends State<MyApp> {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   bool _obscureText = true;
   String _region = 'na';
-  Future<String> _user;
+  String _user;
   Future<List<dynamic>> _matches;
   String _accessToken;
   String _entitlementToken;
   bool _isLoading = false;
-  List<int> points = [0, 0, 0];
+  List<int> points = List();
 
   void _toggleLogin() {
     setState(() {
@@ -115,31 +115,13 @@ class _MyAppState extends State<MyApp> {
 
   void updateToLatestGames(List<dynamic> matches) {
     if (matches != null && matches.isNotEmpty) {
-      int count = 0, i = 0;
+      int count = 0;
       matches.forEach((game) {
         if (game["TierAfterUpdate"] == 0) {
+          points.add(0);
           print("Tier not changed");
-        } else if (game["TierAfterUpdate"] >
-            game[
-                "TierBeforeUpdate"]) // Promoted meaning, that afterupdate is more than beforeupdate
-        {
-          // player promoted
-          int before = game["RankedRatingBeforeUpdate"];
-          int after = game["RankedRatingAfterUpdate"];
-          int differ = (after - before) + 100;
-          points[i++] = differ;
-          count++;
-        } else if (game["TierAfterUpdate"] < game["TierBeforeUpdate"]) {
-          // player demoted
-          int before = game["RankedRatingBeforeUpdate"];
-          int after = game["RankedRatingAfterUpdate"];
-          int differ = (after - before) - 100;
-          points[i++] = differ;
-          count++;
         } else {
-          int before = game["RankedRatingBeforeUpdate"];
-          int after = game["RankedRatingAfterUpdate"];
-          points[i++] = after - before;
+          points.insert(0, game["RankedRatingEarned"]);
           count++;
         }
 
@@ -300,11 +282,8 @@ class _MyAppState extends State<MyApp> {
                                       print(
                                           "=================== entitlement token ===================");
                                       print(_entitlementToken);
-                                      setState(() {
-                                        _user = getUserId();
-                                        print("clicked");
-                                      });
-                                      _matches = getCompiDetails(await _user);
+                                      _user = await getUserId();
+                                      _matches = getCompiDetails(_user);
                                       updateToLatestGames(await _matches);
                                       setState(() {});
                                     } else {
@@ -397,11 +376,26 @@ class _MyAppState extends State<MyApp> {
                               color: Colors.redAccent,
                               splashColor: Colors.greenAccent,
                               onPressed: () async {
-                                _matches = getCompiDetails(await _user);
+                                _matches = getCompiDetails(_user);
                                 updateToLatestGames(await _matches);
                                 setState(() {});
                               },
-                              child: Text('Refresh'))
+                              child: Text('Refresh')),
+                          SizedBox(height: size.height * 0.032),
+                          Text(
+                            'Command for discord bot is ',
+                            style: TextStyle(
+                                color: Colors.white,
+                                fontWeight: FontWeight.bold,
+                                fontSize: 20),
+                          ),
+                          SizedBox(height: size.height * 0.032),
+                          SelectableText(
+                            '!setup $_user $_region',
+                            style: TextStyle(
+                              color: Colors.white,
+                            ),
+                          ),
                         ],
                       ),
                     );
