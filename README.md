@@ -7,7 +7,7 @@
 
 [![Codemagic build status](https://api.codemagic.io/apps/5ff6b5d9eb84020012720033/5ff6b5d9eb84020012720032/status_badge.svg)](https://codemagic.io/apps/5ff6b5d9eb84020012720033/5ff6b5d9eb84020012720032/latest_build)
 
-## Warning: Recently riot has announced that using in-game api may lead to RIOT ID ban. Use this app on your own risk, I'm not responsible for any damage caused.
+
 
 ## How to use
 
