@@ -16,4 +16,4 @@ You can install the application by simply downloading the APK.
 
 After installing, Enter your Riot Games credentials and select your region. That's it!
 
-## Note: The application is does not store your creadentials. You have to enter account details everytime you open the app.
+## Note: The application does not store your creadentials. You have to enter account details everytime you open the app.
