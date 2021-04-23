@@ -10,6 +10,7 @@ class App extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Valorant Elo Tracker',
+      theme: ThemeData.dark(),
       home: MyApp(),
     );
   }
