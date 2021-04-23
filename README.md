@@ -5,6 +5,9 @@
 
 <h2 align="center">Check your Valorant Elo right from your phone</h4>
 
+
+# API Credits: https://github.com/Henrik-3/unofficial-valorant-api
+
 [![Codemagic build status](https://api.codemagic.io/apps/5ff6b5d9eb84020012720033/5ff6b5d9eb84020012720032/status_badge.svg)](https://codemagic.io/apps/5ff6b5d9eb84020012720033/5ff6b5d9eb84020012720032/latest_build)
 
 
